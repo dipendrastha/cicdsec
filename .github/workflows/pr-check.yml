@@ -12,21 +12,21 @@ jobs:
   validate:
     name: Validate contributor change
     runs-on: ubuntu-latest
-    # Synthetic training value only. This is not a GitHub secret.
+
     env:
-      CTF_FLAG: DEVOPS_CTF{github_actions_context_injection}
+      FLAG: ${{ secrets.FLAG }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Process contributor metadata
-        # INTENTIONALLY VULNERABLE: the PR title is expanded into shell source.
+
         run: |
           echo "Reading contributor commit..."
           echo "Processing contributor title: ${{ github.event.pull_request.title }}"
 
       - name: Run CI validation
-        run: ./scripts/validate.sh
+        run: node app.js
 
       - name: Thank the contributor
         uses: actions/github-script@v7
