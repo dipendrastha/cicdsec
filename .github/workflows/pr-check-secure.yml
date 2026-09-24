@@ -1,0 +1,36 @@
+name: Pull request CI (secure reference)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Process contributor metadata safely
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          printf 'Reading contributor commit...\n'
+          printf 'Processing contributor title: %s\n' "$PR_TITLE"
+
+      - name: Run CI validation
+        run: ./scripts/validate.sh
+
+      - name: Thank the contributor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Thank you for the PR'
+            });

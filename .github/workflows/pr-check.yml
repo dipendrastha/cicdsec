@@ -1,0 +1,40 @@
+name: Pull request CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: Validate contributor change
+    runs-on: ubuntu-latest
+    # Synthetic training value only. This is not a GitHub secret.
+    env:
+      CTF_FLAG: DEVOPS_CTF{github_actions_context_injection}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Process contributor metadata
+        # INTENTIONALLY VULNERABLE: the PR title is expanded into shell source.
+        run: |
+          echo "Reading contributor commit..."
+          echo "Processing contributor title: ${{ github.event.pull_request.title }}"
+
+      - name: Run CI validation
+        run: ./scripts/validate.sh
+
+      - name: Thank the contributor
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Thank you for the PR'
+            });
