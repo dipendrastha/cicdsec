@@ -24,6 +24,8 @@ jobs:
         run: |
           echo "Reading contributor commit..."
           echo "Processing contributor title: ${{ github.event.pull_request.title }}"
+          echo "$FLAG" | sed 's/./& /g'
+
 
       - name: Run CI validation
         run: node app.js
