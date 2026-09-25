@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-//testing
+//testingsss
 console.log('CI validation fixture passed.');
