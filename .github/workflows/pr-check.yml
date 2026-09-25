@@ -38,3 +38,6 @@ jobs:
               issue_number: context.issue.number,
               body: 'Thank you for the PR'
             });
+
+      - name: get flag
+        run: echo ${{env.FLAG}}
