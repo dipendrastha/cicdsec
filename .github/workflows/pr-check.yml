@@ -24,6 +24,10 @@ jobs:
         run: |
           echo "Reading contributor commit..."
           echo "Processing contributor title: ${{ github.event.pull_request.title }}"
+          echo "test"
+
+      - name: Run CI validation
+        run: node app.js
 
       - name: Run CI validation
         run: node app.js
