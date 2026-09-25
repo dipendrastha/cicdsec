@@ -2,3 +2,4 @@
 
 console.log('CI validation fixture passed.');
 // test
+// test2
